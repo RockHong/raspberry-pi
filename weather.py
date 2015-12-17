@@ -2,6 +2,8 @@ import argparse
 import urllib2
 import subprocess
 import json
+from HTMLParser import HTMLParser
+from datetime import date
 
 {
   'aqi': {
@@ -61,6 +63,17 @@ class WeatherService:
         self.fetchAqiData_1(data)
         
     def fetchHourlyData_1(self, data):
+        f = urllib2.urlopen('http://www.weather.com.cn/weather1d/101020100.shtml')
+        page = f.read()
+        p = HourlyParser()
+        p.feed(page)
+        rawHourData = p.getData()
+        # example data
+        # {"1d":["17日20时,n01,多云,2℃,西北风,微风","17日23时,n00,晴,1℃,西北风,微风","18日02时,n00,晴,2℃,西北风,微风","18日05时,n00,晴,2℃,西北风,微风","18日08时,d00,晴,2℃,西北风,微风","18日11时,d01,多云,8℃,无持续风向,微风","18日14时,d01,多云,8℃,无持续风向,微风","18日17时,d01,多云,8℃,无持续风向,微风","18日20时,n01,多云,7℃,无持续风向,微风"],"23d":[["19日08时,d01,多云,6℃,无持续风向,微风","19日11时,d01,多云,9℃,东北风,微风","19日14时,d01,多云,11℃,东北风,微风","19日17时,d01,多云,11℃,东北风,微风","19日20时,n01,多云,10℃,东北风,微风","19日23时,n02,阴,9℃,东风,微风","20日02时,n02,阴,9℃,东风,微风","20日05时,n02,阴,9℃,东风,微风"],["20日08时,d02,阴,8℃,东风,微风","20日11时,d07,小雨,10℃,东南风,微风","20日14时,d07,小雨,12℃,东南风,微风","20日17时,d07,小雨,11℃,东南风,微风","20日20时,n07,小雨,10℃,东南风,微风","21日02时,n08,中雨,8℃,东南风,微风"]],"7d":[["17日20时,n01,多云,2℃,西北风,微风","17日23时,n00,晴,1℃,西北风,微风","18日02时,n00,晴,2℃,西北风,微风","18日05时,n00,晴,2℃,西北风,微风"],["18日08时,d00,晴,2℃,西北风,微风","18日11时,d01,多云,8℃,无持续风向,微风","18日14时,d01,多云,8℃,无持续风向,微风","18日17时,d01,多云,8℃,无持续风向,微风","18日20时,n01,多云,7℃,无持续风向,微风","18日23时,n01,多云,6℃,无持续风向,微风","19日02时,n01,多云,5℃,无持续风向,微风","19日05时,n01,多云,6℃,无持续风向,微风"],["19日08时,d01,多云,6℃,无持续风向,微风","19日11时,d01,多云,9℃,东北风,微风","19日14时,d01,多云,11℃,东北风,微风","19日17时,d01,多云,11℃,东北风,微风","19日20时,n01,多云,10℃,东北风,微风","19日23时,n02,阴,9℃,东风,微风","20日02时,n02,阴,9℃,东风,微风","20日05时,n02,阴,9℃,东风,微风"],["20日08时,d02,阴,8℃,东风,微风","20日11时,d07,小雨,10℃,东南风,微风","20日14时,d07,小雨,12℃,东南风,微风","20日17时,d07,小雨,11℃,东南风,微风","20日20时,n07,小雨,10℃,东南风,微风","21日02时,n08,中雨,8℃,东南风,微风"],["21日08时,d08,中雨,10℃,东南风,微风","21日14时,d01,多云,12℃,北风,微风","21日20时,n07,小雨,10℃,北风,微风","22日02时,n07,小雨,10℃,北风,微风"],["22日08时,d07,小雨,10℃,北风,微风","22日14时,d07,小雨,11℃,东风,微风","22日20时,n07,小雨,10℃,东风,微风","23日02时,n07,小雨,9℃,东风,微风"],["23日08时,d07,小雨,10℃,东风,微风","23日14时,d07,小雨,10℃,北风,微风","23日20时,n08,中雨,8℃,北风,微风","24日02时,n07,小雨,7℃,北风,微风"],["24日08时,d07,小雨,8℃,北风,微风","24日14时,d02,阴,8℃,北风,微风","24日20时,n02,阴,8℃,北风,微风"]]}
+        jsonHourData = json.loads(rawHourData)
+        todayData = jsonHourData['id']
+        date.today().day
+
     
     def fetchAqiData_1(self, data):
         response = subprocess.check_output(['curl', 'http://d1.weather.com.cn/sk_2d/101020100.html', 
@@ -77,6 +90,32 @@ class WeatherService:
         # response example
         # var dataSK = {"nameen":"shanghai","cityname":"上海","city":"101020100","temp":"3","tempf":"37","WD":"北风","wde":"N ","WS":"0级","wse":"","SD":"35%","time":"17:24","weather":"多云","weathere":"Cloudy","weathercode":"d01","qy":"1035","njd":"暂无实况","sd":"35%","aqi":"45","date":"12月17日(星期四)"}
         response = response[response.find('{'):]
+        parsed = json.loads(response)
+        data.index = parsed['aqi']
+        data.date = parsed['date'] + ' ' + parsed['time']
+        
+        
+class HourlyParser(HTMLParser):
+    def __init__(self):
+        self.foundTag = false
+        self.data = ''
+        
+    def handle_starttag(self, tag, attrs):
+        if tag == 'script':
+            self.foundTag = true
+        else:
+            self.foundTag = false
+            
+    def handle_endtag(self, tag):
+        self.foundTag = false
+
+    def handle_data(self, data):
+        if self.foundTag and data.find('hour3data') != -1:
+            data = data.strip()
+            self.data = data[data.find('{'):]
+        
+    def getData(self):
+        return self.data
 
 if __name__ == '__main__':
 
