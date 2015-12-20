@@ -148,12 +148,13 @@ class Reporter:
     def clearHistory(self, days):
         for x in range(0, int(days)):
             name = str(date.today() + timedelta(x))
-            os.rename(name + '.mp3', name + '.bak')
+            if os.path.isfile(name + '.mp3'):
+                os.rename(name + '.mp3', name + '.bak')
         for x in glob.glob('*.mp3'):
             os.remove(x)
             print str(datetime.now()) + ' file: ' + x + ' is removed.'
-        for x in range(0, int(days)):
-            name = str(date.today() + timedelta(x))
+        for x in glob.glob('*.bak'):
+            name = x[:x.find('.')]
             os.rename(name + '.bak', name + '.mp3')
         
     def getText(self, hours):
@@ -171,17 +172,18 @@ class Reporter:
             hstr += str(x.hour) + u'时，' + x.condition + u'；'
             
         text = astr + u'。' + hstr + u'。'
-        print str(datetime.now()) + ' ' + text
+        print str(datetime.now()) + ' ' + text.encode('utf8')
         return text
         
     def getVoice(self, text):
+        print str(datetime.now()) + ' try to get voice.'
         # example
         # http://tts.baidu.com/text2audio?lan=zh&amp;pid=101&amp;ie=UTF-8&amp;text=%E4%B8%8A%E5%8D%888%E7%82%B9%20%E5%B0%8F%E9%9B%A8%20%E7%99%BE%E5%88%86%E4%B9%8B9&amp;spd=2
         base = 'http://tts.baidu.com/text2audio?lan=zh&pid=101&ie=UTF-8&text='
         url = base + urllib.quote(text.encode('utf8')) + '&spd=2'
         
         urllib.urlretrieve(url, self.filename)
-        print self.filename + "has downloaded."
+        print str(datetime.now()) + ' ' + self.filename + "has downloaded."
         
     def play(self, hours):
         text = self.getText(hours)
@@ -219,6 +221,8 @@ class Reporter:
         os.system('mpg321 ' + self.filename)
 
 if __name__    == "__main__":
+    print str(datetime.now()) + ' current working dir is ' + os.getcwd()
+
     parser = argparse.ArgumentParser(description='weather reporter')
     parser.add_argument('--history', default="5", help='history data to keep')
     parser.add_argument('--hours', required=True, help='which hours of data need to report')
