@@ -1,0 +1,1 @@
+30 7 * * 1,2,3,4,5 python weather.py --hours 19,20,21 --history 1 >> weather.log
