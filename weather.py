@@ -16,6 +16,12 @@ import glob
 #import pyglet
 
 
+# reference
+# tts
+# http://fanyi.baidu.com/#auto/zh/
+# weather api
+# http://goodbai.com/web/UseForecastAndPMDataAPI.html it lists some usable api
+
 
 class HourlyEntry:
     #def __init__(self, c, t, w, h):
