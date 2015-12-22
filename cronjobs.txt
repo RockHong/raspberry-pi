@@ -1,1 +1,2 @@
 35,45 7 * * 1,2,3,4,5  cd /home/pi/log/ && python /home/pi/workspace/raspberry-pi/weather.py --hours 8,9,17,18 --history 5 >> /home/pi/log/weather.log 2>&1
+25 7 * * 1,2,3,4,5  python /home/pi/workspace/raspberry-pi/music.py
