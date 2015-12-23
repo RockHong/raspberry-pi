@@ -10,21 +10,24 @@ def playSongs():
     os.chdir(location)
 
     max = 2
-    played = 0
     songs = glob.glob('*.mp3')
-    for x in range(0,max):
-        if played == max:
-            break
-        s = random.randint(1,24) % len(songs)
-        print 'song to play: ' + songs[s]
-        play_mpg321(songs[s])
-        played += 1
+    # shuffle
+    size = len(songs)
+    for x in range(0, size):
+        pick = random.randint(x, size-1)
+        (songs[x], songs[pick]) = (songs[pick], songs[x])
+
+    for x in songs[:max]:
+        print 'song to play: ' + x
+        play_mpg321(x)
 
 def play_mpg321(song):
-    os.system('mpg321 ' + song)
+    cmd = 'mpg321 "' + song + '"'
+    print 'cmd to run: ' + cmd
+    os.system(cmd)
 
 
 if __name__    == "__main__":
    playSongs()
-    
+
 
