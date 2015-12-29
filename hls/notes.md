@@ -10,7 +10,11 @@ Apple documents: [doc 1][1], [doc 2][2]
 [&lt;video&gt;][3]
 
 
+mediafilesegmenter -f root/v/test-1/ -b http://localhost:8080/v/test-1/ IMG_2146.m4v
 
+
+http://localhost:8080/v/test-1/iframe_index.m3u8   not work
+http://localhost:8080/v/test-1/prog_index.m3u8   work
 
 
 
