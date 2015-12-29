@@ -38,3 +38,9 @@ Options:
   655  nginx -s reload
   669  ps -ef | grep nginx
   700  history | grep nginx
+
+
+
+
+  开机启动
+  简单认证
