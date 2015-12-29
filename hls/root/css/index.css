@@ -1,0 +1,37 @@
+
+/* min-width is copied from http://getbootstrap.com/customize/#media-queries-breakpoints 
+   also see http://getbootstrap.com/css/#grid-media-queries
+   */
+@media (min-width: 768px) {
+    .col-sm-1 {
+        width: 230px;
+    }
+
+    .video-sm {
+        width: 100%;
+        height: 150px;
+    }
+    
+    .video-sm  video {
+        width: 200px;
+    }
+}
+
+
+.video-sm  p {
+    color: rgb(22, 122, 198);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.video-xs {
+    margin: 10px;
+}
+
+.video-xs  p{
+    height: 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
