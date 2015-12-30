@@ -44,3 +44,4 @@ Options:
 
   开机启动
   简单认证
+mime type
