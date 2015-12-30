@@ -8,20 +8,20 @@ import subprocess
 template = '''
                 <div class="col-sm-1">
                     <div class="video-sm hidden-xs" >
-                        <video controls src="{path}/{outputdir}/prog_index.m3u8">
+                        <video controls src="/{path}{outputdir}/prog_index.m3u8">
                         </video>
                         <p>
-                        <a href="{path}/{outputdir}/prog_index.m3u8">{desc}</a>
+                        <a href="/{path}{outputdir}/prog_index.m3u8">{desc}</a>
                         <p>
                     </div>
                     <div class="video-xs visible-xs-block">
                         <!-- embed-responsive-4by3 embed-responsive-16by9 -->
                         <div class="embed-responsive embed-responsive-16by9">
-                            <video controls class="embed-responsive-item" src="{path}/{outputdir}/prog_index.m3u8">
+                            <video controls class="embed-responsive-item" src="/{path}{outputdir}/prog_index.m3u8">
                             </video>
                         </div>
                         <p>
-                            <a href="{path}/{outputdir}/prog_index.m3u8">{desc}</a>
+                            <a href="/{path}{outputdir}/prog_index.m3u8">{desc}</a>
                         </p>
                     </div>
                 </div><!-- end: col -->'''
@@ -53,16 +53,19 @@ def is_ascii(s):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='video processor')
     parser.add_argument('--outdir', help='dir to store HLS segment files and play list')
-    parser.add_argument('--host', default='http://localhost:8080/', help='host')
+    parser.add_argument('--host', default='http://192.168.0.169:8080/', help='host')
     parser.add_argument('--path', default='v/', help='path')
     parser.add_argument('--src', required=True, help='source video')
+    parser.add_argument('--desc', help='video description')
     parser.add_argument('--htmlfile', help='html file to append')
     
     args = parser.parse_args()
+    if args.desc is None:
+        args.desc = args.src
     
     dirname = mk_output_dir(args)
-    subprocess.check_call(['mediafilesegmenter','-f {outputdir}  -b {host}{path}{outputdir} {src}'.format(outputdir=dirname, host=args.host, path=args.path, src=args.src)])
-    print template.format(path=args.path, src=args.src)
+    #subprocess.check_call(['mediafilesegmenter','-f', dirname,  '-b', '{host}{path}{outputdir}'.format(outputdir=dirname, host=args.host, path=args.path), args.src])
+    print template.format(path=args.path, src=args.src, outputdir=dirname, desc=args.desc)
 
 
 
