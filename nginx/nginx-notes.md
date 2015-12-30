@@ -1,3 +1,9 @@
+## 命令
+sudo nginx -t -c nginx.conf -p /home/pi/workspace/raspberry-pi/nginx
+
+sudo nginx -s reload
+
+
 >nginx -h
 nginx version: nginx/1.4.2
 Usage: nginx [-?hvVtq] [-s signal] [-c filename] [-p prefix] [-g directives]
