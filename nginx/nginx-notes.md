@@ -1,53 +1,18 @@
 ## 命令
-sudo nginx -t -c nginx.conf -p /home/pi/workspace/raspberry-pi/nginx
 
-sudo nginx -s reload
+    sudo nginx -p /home/pi/workspace/raspberry-pi/nginx -c nginx.conf -t  
 
+因为目录权限的问题（比如log目录），需要以`sudo`来启动，
+启动时会把nginx进程的用户切换成配置文件中指定的用户。
+`-p`指定去哪个目录找配置文件。
+`-t`，启动前先测试一下。
 
->nginx -h
-nginx version: nginx/1.4.2
-Usage: nginx [-?hvVtq] [-s signal] [-c filename] [-p prefix] [-g directives]
+	sudo nginx -s reload
 
-Options:
-  -?,-h         : this help
-  -v            : show version and exit
-  -V            : show version and configure options then exit
-  -t            : test configuration and exit
-  -q            : suppress non-error messages during configuration testing
-  -s signal     : send signal to a master process: stop, quit, reopen, reload
-  -p prefix     : set prefix path (default: /usr/local/Cellar/nginx/1.4.2/)
-  -c filename   : set configuration file (default: /usr/local/etc/nginx/nginx.conf)
-  -g directives : set global directives out of configuration file
+重新载入配置文件。要以运行nginx的用户来执行。
+（TODO：以root还是以配置文件中指定的用户，比如www-data？）
 
 
-  266  git add notes/nginx-notes.txt
-  326  cd nginx_workspace/
-  333  which nginx
-  602  which nginx
-  603  cat /usr/local/etc/nginx/nginx.conf
-  604  nginx --help
-  605  nginx -h
-  607  nginx -c nginx/nginx.conf -p nginx/
-  609  nginx -c /Users/hongzhihua/Documents/workspace/others_workspace/raspberry-pi/nginx/nginx.conf -p /Users/hongzhihua/Documents/workspace/others_workspace/raspberry-pi/nginx/
-  610  nginx -V
-  611  sudo nginx -c /Users/hongzhihua/Documents/workspace/others_workspace/raspberry-pi/nginx/nginx.conf -p /Users/hongzhihua/Documents/workspace/others_workspace/raspberry-pi/nginx/
-  623  brew upgrade nginx
-  624   nginx -c /Users/hongzhihua/Documents/workspace/others_workspace/raspberry-pi/nginx/nginx.conf -p /Users/hongzhihua/Documents/workspace/others_workspace/raspberry-pi/nginx/
-  625  ps -ef | grep nginx
-  627  nginx -h
-  628  nginx -s reload
-  642  nginx -V
-  644  nginx -s reload
-  645  ps -ef | grep nginx
-  652  nginx -h
-  653  nginx -s reload
-  655  nginx -s reload
-  669  ps -ef | grep nginx
-  700  history | grep nginx
+## 开机启动
+TODO
 
-
-
-
-  开机启动
-  简单认证
-mime type

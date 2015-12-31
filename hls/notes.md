@@ -3,18 +3,26 @@
 - jquery
 - less
 
-## http live streaming
-Apple documents: [doc 1][1], [doc 2][2]
-
-## html
+### html
 [&lt;video&gt;][3]
 
 
-mediafilesegmenter -f root/v/test-1/ -b http://localhost:8080/v/test-1/ IMG_2146.m4v
+## http live streaming
+Apple documents: [doc 1][1], [doc 2][2]
+
+### mediafilesegmenter
+命令示例，
+
+	mediafilesegmenter -f www-root/v/test-1/ -b http://localhost:8080/v/test-1/ IMG_2146.m4v
+
+### iframe\_index.m3u8 or prog\_index.m3u8
+苹果文档说`iframe_index.m3u8`能更好地支持快进、后退。
+但是`http://localhost:8080/v/test-1/iframe_index.m3u8`貌似不能工作，
+而`http://localhost:8080/v/test-1/prog_index.m3u8`可以正常播放。
+
+TODO
 
 
-http://localhost:8080/v/test-1/iframe_index.m3u8   not work
-http://localhost:8080/v/test-1/prog_index.m3u8   work
 
 
 
