@@ -16,6 +16,8 @@ import glob
 #import pyglet
 
 
+MAX_TRY = 100
+
 # reference
 # tts
 # http://fanyi.baidu.com/#auto/zh/
@@ -73,7 +75,11 @@ class WeatherService:
         self.fetchAqiData_1(data)
         
     def fetchHourlyData_1(self, data):
+        i_try = 0
         while True:
+            i_try += 1
+            if i_try > MAX_TRY:
+                break
             try:
                 f = urllib2.urlopen('http://www.weather.com.cn/weather1d/101020100.shtml')
                 page = f.read()
@@ -93,10 +99,14 @@ class WeatherService:
                 print str(datetime.now()) + ' fetchHourlyData_1() succeeded.'
                 break
             except:
-                print str(datetime.now()) + " try fetchHourlyData_1() failed."
+                print str(i_try) + ' ' + str(datetime.now()) + " try fetchHourlyData_1() failed."
 
     def fetchAqiData_1(self, data):
+        i_try = 0
         while True:
+            i_try += 1
+            if i_try > MAX_TRY:
+                break
             try:
                 # http://www.weather.com.cn/weather1d/101020100.shtml will send out several requests
                 # you can do F12, and find below request
@@ -121,7 +131,7 @@ class WeatherService:
                 print str(datetime.now()) + ' fetchAqiData_1() succeeded.'
                 break
             except:
-                print str(datetime.now()) + ' try fetchAqiData_1() failed.'
+                print str(i_try) + ' ' + str(datetime.now()) + ' try fetchAqiData_1() failed.'
     
 class HourlyParser(HTMLParser):
     def __init__(self):
